@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       animation: {
@@ -20,6 +21,11 @@ export default {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
+      colors: {
+        slate: {
+          750: '#334155',
+        }
+      }
     },
   },
   plugins: [],

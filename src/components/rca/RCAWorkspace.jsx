@@ -10,12 +10,10 @@ const { FiAlertTriangle, FiCpu, FiCheckCircle, FiX } = FiIcons
 const RCAWorkspace = () => {
   const [selectedMethod, setSelectedMethod] = useState('5_whys')
   const [humanErrorBlocked, setHumanErrorBlocked] = useState(true)
-  const [systemValidated, setSystemValidated] = useState(false)
 
   const rcaMethods = [
     { id: '5_whys', name: '5 Whys', description: 'Current method' },
-    { id: 'fishbone', name: 'Fishbone Diagram', description: 'Cause & Effect' },
-    { id: 'fault_tree', name: 'Fault Tree Analysis', description: 'Logic Tree' }
+    { id: 'fishbone', name: 'Fishbone Diagram', description: 'Cause & Effect' }
   ]
 
   const aiRecommendations = [
@@ -57,20 +55,24 @@ const RCAWorkspace = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">RCA Wizard - Enhanced Analysis</h1>
-          <p className="text-slate-600">AI-powered root cause analysis with depth enforcement</p>
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">RCA Wizard - Enhanced Analysis</h1>
+          <p className="text-slate-600 dark:text-slate-400">AI-powered root cause analysis with depth enforcement</p>
         </div>
-        <div className={`px-3 py-1 rounded text-sm font-medium ${humanErrorBlocked ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`}>
+        <div className={`px-3 py-1 rounded text-sm font-medium ${
+          humanErrorBlocked 
+            ? 'bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300' 
+            : 'bg-green-50 border border-green-200 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300'
+        }`}>
           {humanErrorBlocked ? '"Human Error" Block Active' : 'System Validated'}
         </div>
       </div>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
         <div className="flex items-start space-x-3">
-          <SafeIcon icon={FiAlertTriangle} className="text-amber-600 mt-0.5" />
+          <SafeIcon icon={FiAlertTriangle} className="text-amber-600 dark:text-amber-400 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-amber-800 mb-2">Prevents Superficial Root-Cause Classification</h3>
-            <p className="text-amber-700 text-sm">
+            <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">Prevents Superficial Root-Cause Classification</h3>
+            <p className="text-amber-700 dark:text-amber-300 text-sm">
               System enforces deeper inquiry before allowing "human error" classification - validates against FDA expectations for thoroughness
             </p>
           </div>
@@ -80,8 +82,8 @@ const RCAWorkspace = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Method Selection */}
         <div className="col-span-3">
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <h3 className="font-semibold text-slate-800 mb-4">RCA Methods</h3>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+            <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-4">RCA Methods</h3>
             <div className="space-y-2">
               {rcaMethods.map((method) => (
                 <button
@@ -89,12 +91,12 @@ const RCAWorkspace = () => {
                   onClick={() => setSelectedMethod(method.id)}
                   className={`w-full text-left p-3 rounded-lg border transition-all ${
                     selectedMethod === method.id
-                      ? 'bg-blue-50 border-blue-200 text-blue-700'
-                      : 'border-slate-200 hover:bg-slate-50'
+                      ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300'
+                      : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   <div className="font-medium">{method.name}</div>
-                  <div className="text-xs text-slate-500">{method.description}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{method.description}</div>
                 </button>
               ))}
             </div>
@@ -102,88 +104,48 @@ const RCAWorkspace = () => {
         </div>
 
         {/* Main Analysis Area */}
-        <div className="col-span-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="col-span-9">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             {renderMethodContent()}
-          </div>
-        </div>
-
-        {/* AI Recommendations */}
-        <div className="col-span-3">
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <div className="flex items-center space-x-2 mb-4">
-              <SafeIcon icon={FiCpu} className="text-slate-600" />
-              <h3 className="font-semibold text-slate-800">AI Recommendations</h3>
-            </div>
-            <div className="space-y-3">
-              {aiRecommendations.map((rec) => (
-                <motion.div
-                  key={rec.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className={`p-3 bg-${rec.color}-50 rounded-lg border border-${rec.color}-200`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <p className={`text-sm text-${rec.color}-700 font-medium`}>{rec.title}</p>
-                      <p className={`text-xs text-${rec.color}-600 mt-1`}>{rec.description}</p>
-                    </div>
-                    {rec.status === 'completed' ? (
-                      <SafeIcon icon={FiCheckCircle} className={`text-${rec.color}-600 text-sm`} />
-                    ) : rec.status === 'in_progress' ? (
-                      <div className={`w-2 h-2 bg-${rec.color}-500 rounded-full animate-pulse`}></div>
-                    ) : (
-                      <div className={`w-2 h-2 bg-${rec.color}-300 rounded-full`}></div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
 
-      {/* System Validation Panel */}
-      {humanErrorBlocked && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl border border-slate-200 p-6"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-slate-800">System Validation Required</h3>
-            <button
-              onClick={() => setSystemValidated(true)}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+      {/* AI Recommendations - Horizontal Box */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+      >
+        <div className="flex items-center space-x-2 mb-4">
+          <SafeIcon icon={FiCpu} className="text-slate-600 dark:text-slate-300" />
+          <h3 className="font-semibold text-slate-800 dark:text-slate-100">AI Recommendations</h3>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {aiRecommendations.map((rec) => (
+            <motion.div
+              key={rec.id}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className={`p-4 bg-${rec.color}-50 dark:bg-${rec.color}-900/20 rounded-lg border border-${rec.color}-200 dark:border-${rec.color}-800`}
             >
-              Mark as Validated
-            </button>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <h4 className="font-medium text-red-800 mb-2">Calibration Records</h4>
-              <p className="text-sm text-red-600">Last calibration: 45 days ago (Due: 30 days)</p>
-              <div className="mt-2">
-                <span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">Action Required</span>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className={`text-sm text-${rec.color}-700 dark:text-${rec.color}-300 font-medium`}>{rec.title}</p>
+                  <p className={`text-xs text-${rec.color}-600 dark:text-${rec.color}-400 mt-1`}>{rec.description}</p>
+                </div>
+                {rec.status === 'completed' ? (
+                  <SafeIcon icon={FiCheckCircle} className={`text-${rec.color}-600 dark:text-${rec.color}-400 text-sm`} />
+                ) : rec.status === 'in_progress' ? (
+                  <div className={`w-2 h-2 bg-${rec.color}-500 rounded-full animate-pulse`}></div>
+                ) : (
+                  <div className={`w-2 h-2 bg-${rec.color}-300 rounded-full`}></div>
+                )}
               </div>
-            </div>
-            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <h4 className="font-medium text-amber-800 mb-2">Maintenance Logs</h4>
-              <p className="text-sm text-amber-600">Pressure sensor replacement overdue by 5 days</p>
-              <div className="mt-2">
-                <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs">Review Required</span>
-              </div>
-            </div>
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-              <h4 className="font-medium text-green-800 mb-2">Training Records</h4>
-              <p className="text-sm text-green-600">All operators current on certification</p>
-              <div className="mt-2">
-                <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Verified</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   )
 }

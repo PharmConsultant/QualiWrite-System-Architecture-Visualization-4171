@@ -1,14 +1,13 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import SafeIcon from '../../common/SafeIcon'
-import * as FiIcons from 'react-icons/fi'
 import { useData } from '../../hooks/useData'
 import MetricsCards from './MetricsCards'
 import DeviationChart from './DeviationChart'
 import AlertsPanel from './AlertsPanel'
 import RecentActivity from './RecentActivity'
-
-const { FiBell, FiUser } = FiIcons
+import QuickActions from './QuickActions'
+import AdvancedAnalytics from './AdvancedAnalytics'
+import AICostOverview from './AICostOverview'
 
 const Dashboard = ({ user }) => {
   const { metrics, deviations, loading } = useData()
@@ -23,31 +22,52 @@ const Dashboard = ({ user }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800">Performance Dashboard</h1>
-          <p className="text-slate-600">Life-science KPI tracking with drill-down capabilities</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-            Quality Score: {metrics?.quality_score}/10
-          </div>
-          <SafeIcon icon={FiBell} className="text-slate-400 text-xl cursor-pointer hover:text-slate-600" />
+      {/* Welcome Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white"
+      >
+        <h1 className="text-2xl font-bold mb-2">
+          Welcome back, {user?.full_name || 'Demo User'}
+        </h1>
+        <p className="text-blue-100">
+          FDA 21 CFR 210/211 Compliant Quality Management Dashboard
+        </p>
+        <div className="mt-4 flex items-center space-x-6">
           <div className="flex items-center space-x-2">
-            <SafeIcon icon={FiUser} className="text-slate-400 text-xl" />
-            <span className="text-sm text-slate-600">{user?.full_name}</span>
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-sm">System Status: Operational</span>
+          </div>
+          <div className="text-sm">
+            Last Login: {new Date().toLocaleDateString()}
           </div>
         </div>
-      </div>
+      </motion.div>
 
+      {/* Metrics Cards */}
       <MetricsCards metrics={metrics} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DeviationChart deviations={deviations} />
-        <AlertsPanel deviations={deviations} />
-      </div>
+      {/* Advanced Analytics Section */}
+      <AdvancedAnalytics deviations={deviations} />
 
-      <RecentActivity deviations={deviations} />
+      {/* AI Cost Overview */}
+      <AICostOverview />
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Left Column - Charts */}
+        <div className="xl:col-span-2 space-y-6">
+          <DeviationChart deviations={deviations} />
+          <RecentActivity deviations={deviations} />
+        </div>
+
+        {/* Right Column - Actions & Alerts */}
+        <div className="space-y-6">
+          <QuickActions />
+          <AlertsPanel deviations={deviations} />
+        </div>
+      </div>
     </div>
   )
 }
