@@ -65,8 +65,8 @@ function App() {
   // Show main application
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Router>
+      <Router>
+        <AuthProvider>
           <MainLayout user={user} onLogout={handleLogout}>
             <Routes>
               <Route path="/" element={<Dashboard user={user} />} />
@@ -86,8 +86,8 @@ function App() {
               <Route path="/wireframes" element={<Wireframes />} />
             </Routes>
           </MainLayout>
-        </Router>
-      </AuthProvider>
+        </AuthProvider>
+      </Router>
     </ThemeProvider>
   )
 }
