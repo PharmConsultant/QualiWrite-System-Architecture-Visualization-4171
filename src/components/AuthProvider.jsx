@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from 'react'
-import { useAuth } from '../hooks/useAuth'
 
 const AuthContext = createContext()
 
@@ -12,10 +11,17 @@ export const useAuthContext = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const auth = useAuth()
+  // Mock auth data for demo
+  const authValue = {
+    user: null,
+    loading: false,
+    signIn: async () => ({ data: null, error: null }),
+    signUp: async () => ({ data: null, error: null }),
+    signOut: async () => ({ error: null })
+  }
 
   return (
-    <AuthContext.Provider value={auth}>
+    <AuthContext.Provider value={authValue}>
       {children}
     </AuthContext.Provider>
   )
