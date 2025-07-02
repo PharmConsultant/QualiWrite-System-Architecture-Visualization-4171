@@ -1,17 +1,37 @@
 import React from 'react';
 import * as FiIcons from 'react-icons/fi';
-import { FiAlertTriangle } from 'react-icons/fi';
 
-const SafeIcon = ({ icon, name, ...props }) => {
+const SafeIcon = ({ icon, name, className, ...props }) => {
   let IconComponent;
   
   try {
-    IconComponent = icon || (name && FiIcons[`Fi${name}`]);
+    // If icon is passed directly, use it
+    if (icon && typeof icon === 'function') {
+      IconComponent = icon;
+    }
+    // If name is passed, try to find it in FiIcons
+    else if (name && FiIcons[name]) {
+      IconComponent = FiIcons[name];
+    }
+    // If name starts with 'Fi', try to find it
+    else if (name && FiIcons[`Fi${name}`]) {
+      IconComponent = FiIcons[`Fi${name}`];
+    }
+    // Default fallback
+    else {
+      IconComponent = FiIcons.FiAlertTriangle;
+    }
   } catch (e) {
-    IconComponent = null;
+    console.warn('SafeIcon: Error loading icon:', e);
+    IconComponent = FiIcons.FiAlertTriangle;
   }
   
-  return IconComponent ? React.createElement(IconComponent, props) : <FiAlertTriangle {...props} />;
+  return (
+    <IconComponent 
+      className={className} 
+      {...props} 
+    />
+  );
 };
 
 export default SafeIcon;
